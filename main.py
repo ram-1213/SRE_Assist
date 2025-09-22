@@ -294,6 +294,28 @@ def safe_process_secure_message(user_input):
                         analysis_results['code_vulnerabilities'] = code_analysis.get('vulnerabilities', [])
                         analysis_results['vulnerabilities_count'] = len(code_analysis.get('vulnerabilities', []))
                         analysis_results['code_analysis'] = code_analysis
+                        # ADD SANDBOX RUNTIME ANALYSIS
+                        try:
+                            sandbox_result = code_sandbox.analyze_code_runtime_behavior(llm_response)
+                            analysis_results['sandbox_analysis'] = sandbox_result
+
+                            # Update risk score based on runtime behavior
+                            if sandbox_result['suspicious_behavior']:
+                                runtime_risk = sandbox_result['risk_score']
+                                analysis_results['risk_score'] = max(analysis_results['risk_score'], runtime_risk)
+                                analysis_results['runtime_violations'] = sandbox_result['runtime_violations']
+
+                                logger.info(
+                                    f"Sandbox analysis: {len(sandbox_result['runtime_violations'])} runtime violations found")
+
+                        except Exception as e:
+                            logger.error(f"Sandbox analysis failed: {e}")
+                            analysis_results['sandbox_analysis'] = {
+                                'execution_result': {'success': False, 'error': str(e)},
+                                'runtime_violations': [],
+                                'suspicious_behavior': False,
+                                'risk_score': 0
+                            }
 
                         # Update detection status if code has high-risk vulnerabilities
                         if code_risk > 70:
