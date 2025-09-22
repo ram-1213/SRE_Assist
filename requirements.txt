@@ -1,0 +1,16 @@
+streamlit
+python-dotenv
+openai
+anthropic
+google-generativeai
+sqlalchemy
+bcrypt
+cryptography
+bandit
+semgrep
+transformers
+torch
+datetime
+pandas
+numpy
+requests
