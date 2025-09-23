@@ -1,5 +1,5 @@
 """
-Main Streamlit Application - Secure LLM Gateway with SRE Assistant UI Style
+Main Streamlit Application - SRE Codeshield with SRE Assistant UI Style
 Enhanced with Proactive Secure Code Generation (ALL ORIGINAL FEATURES PRESERVED)
 """
 from pathlib import Path
@@ -35,7 +35,7 @@ settings = Settings()
 
 # Page config
 st.set_page_config(
-    page_title="Secure LLM Gateway",
+    page_title="SRE Codeshield",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -132,7 +132,7 @@ def is_educational_code(code_content):
 
 def render_demo_mode():
     """Interactive demo mode to showcase security features"""
-    st.title("🛡️ Security Demo!")
+    st.title("🛡️ Demo!")
 
     # Demo attack scenarios
     demo_attacks = {
@@ -166,7 +166,7 @@ def render_demo_mode():
     col1, col2 = st.columns([2, 1])
 
     with col1:
-        st.markdown("### 🎯 Attack Scenarios")
+        st.markdown("### ")
 
         selected_attack = st.selectbox(
             "Choose an attack to test:",
@@ -185,7 +185,7 @@ def render_demo_mode():
                 demo_security_analysis(attack_info['prompt'], attack_info['expected_detection'])
 
     with col2:
-        st.markdown("### 📊 Security Metrics")
+        st.markdown("### Security Metrics")
 
         # Show fake but realistic security stats
         st.metric("Threats Blocked Today", "47", "↑ 12%")
@@ -193,7 +193,7 @@ def render_demo_mode():
         st.metric("Response Time", "0.3s", "↓ 0.1s")
 
         st.markdown("---")
-        st.markdown("### 🛡️ Active Protections")
+        st.markdown("### Active Protections")
         st.success("✅ Prompt Injection Detection")
         st.success("✅ SQL Injection Scanning")
         st.success("✅ Code Vulnerability Analysis")
@@ -631,7 +631,7 @@ Please rewrite the code to be completely secure while preserving all original fu
 def render_enhanced_sidebar():
     """Enhanced sidebar with demo mode"""
     with st.sidebar:
-        st.markdown("# Secure Gateway")
+        #st.markdown("# Secure Gateway")
         st.markdown("---")
 
         st.markdown(f"### Hello, {st.session_state.username}!")
@@ -640,36 +640,36 @@ def render_enhanced_sidebar():
         # NAVIGATION with Demo Mode
         st.markdown("### Navigation")
 
-        if st.button("🔍 Demo Mode", use_container_width=True):
+        if st.button(" Demo Mode", use_container_width=True):
             st.session_state.current_page = "demo"
             st.rerun()
 
-        if st.button("💬 Chat Assistant", use_container_width=True):
+        if st.button(" Chat Assistant", use_container_width=True):
             st.session_state.current_page = "chat"
             st.rerun()
 
-        if st.button("📊 Security Analytics", use_container_width=True):
+        if st.button(" Security Analytics", use_container_width=True):
             st.session_state.current_page = "analytics"
             st.rerun()
 
-        if st.button("📋 Audit Logs", use_container_width=True):
+        if st.button(" Audit Logs", use_container_width=True):
             st.session_state.current_page = "logs"
             st.rerun()
 
-        if st.button("⚡ Performance Monitor", use_container_width=True):
+        if st.button(" Performance Monitor", use_container_width=True):
             st.session_state.current_page = "performance"
             st.rerun()
 
-        if st.button("👤 Behavioral Analysis", use_container_width=True):
+        if st.button(" Behavioral Analysis", use_container_width=True):
             st.session_state.current_page = "behavioral"
             st.rerun()
 
-        if st.button("⚙️ Settings", use_container_width=True):
+        if st.button(" Settings", use_container_width=True):
             st.session_state.current_page = "settings"
             st.rerun()
 
         st.markdown("---")
-        st.markdown("### 🛡️ Security Systems")
+        st.markdown("###  Security Systems")
 
         # Semantic Detector Status
         semantic_stats = semantic_detector.get_statistics()
@@ -852,8 +852,8 @@ def main_dashboard():
 
 def render_chat_page():
     """Main chat interface with improved error handling"""
-    st.title("Secure LLM Gateway")
-    st.subheader("AI Assistant with Advanced Security")
+    st.title("SRE Codeshield")
+    #st.subheader("AI Assistant with Advanced Security")
 
     if not llm_clients:
         st.error("No LLM clients available. Please check your API keys.")
@@ -969,7 +969,7 @@ llm_clients = init_llm_clients()
 
 def login_page():
     """Login/Signup page using Streamlit native components"""
-    st.markdown("## 🛡️ Secure LLM Gateway")
+    st.markdown("## 🛡️ SRE Codeshield")
     st.tabs(" ")
     col1, col2, col3 = st.columns([1, 2, 1])
 

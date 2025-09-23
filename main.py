@@ -1,5 +1,5 @@
 """
-main.py - Entry point for Secure LLM Gateway
+main.py - Entry point for SRE Codeshield
 Calls pages.py for all UI functionality
 """
 import streamlit as st
@@ -7,7 +7,7 @@ import logging
 from pathlib import Path
 import sys
 
-# Add project root to path
+# Add project root to Path
 sys.path.append(str(Path(__file__).parent))
 
 # Configure logging
@@ -18,7 +18,7 @@ logging.basicConfig(
 
 # Page config
 st.set_page_config(
-    page_title="Secure LLM Gateway",
+    page_title="SRE Codeshield",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -30,8 +30,6 @@ def main():
     try:
         # Import pages module
         import pages
-
-        # Run the main application from pages.py
         pages.main()
 
     except ImportError as e:
