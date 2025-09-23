@@ -1,5 +1,5 @@
 """
-Main Streamlit Application - SRE Codeshield with SRE Assistant UI Style
+Main Streamlit Application - AI SecurityLens with SRE Assistant UI Style
 Enhanced with Proactive Secure Code Generation (ALL ORIGINAL FEATURES PRESERVED)
 """
 from pathlib import Path
@@ -35,7 +35,7 @@ settings = Settings()
 
 # Page config
 st.set_page_config(
-    page_title="SRE Codeshield",
+    page_title="AI SecurityLens",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -852,7 +852,7 @@ def main_dashboard():
 
 def render_chat_page():
     """Main chat interface with improved error handling"""
-    st.title("SRE Codeshield")
+    st.title("AI SecurityLens")
     #st.subheader("AI Assistant with Advanced Security")
 
     if not llm_clients:
@@ -969,7 +969,7 @@ llm_clients = init_llm_clients()
 
 def login_page():
     """Login/Signup page using Streamlit native components"""
-    st.markdown("## 🛡️ SRE Codeshield")
+    st.markdown("## 🛡️ AI SecurityLens")
     st.tabs(" ")
     col1, col2, col3 = st.columns([1, 2, 1])
 

@@ -1,5 +1,5 @@
 """
-main.py - Entry point for SRE Codeshield
+main.py - Entry point for AI SecurityLens
 Calls pages.py for all UI functionality
 """
 import streamlit as st
@@ -18,7 +18,7 @@ logging.basicConfig(
 
 # Page config
 st.set_page_config(
-    page_title="SRE Codeshield",
+    page_title="AI SecurityLens",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
