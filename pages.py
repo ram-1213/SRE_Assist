@@ -1029,9 +1029,9 @@ def display_conversation():
     if not st.session_state.conversation_history:
         with st.chat_message("assistant"):
             st.write(f"""
-            **Hello {st.session_state.username}!** 🛡️
+            **Hello {st.session_state.username}!** 
 
-            I'm your secure AI assistant with advanced threat detection capabilities.
+            I'm your AI SecurityLens with advanced threat detection capabilities.
 
             **Enhanced Security Features:**
             - Real-time prompt injection detection
