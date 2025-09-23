@@ -1,5 +1,5 @@
 """
-Enhanced Code Security Analyzer with Advanced Threat Detection
+Enhanced Code Security Analyzer with Advanced Threat Detection - UPDATED
 """
 import subprocess
 import tempfile
@@ -50,7 +50,7 @@ class EnhancedCodeAnalyzer:
                 'cwe': 'CWE-89'
             },
 
-            # Command Injection
+            # ENHANCED Command Injection patterns
             'command_injection': {
                 'patterns': [
                     r'os\.system\([^)]*\+',
@@ -64,12 +64,21 @@ class EnhancedCodeAnalyzer:
                     r'eval\(.*input\(',
                     r'exec\(.*input\(',
                     r'__import__\(.*input\(',
+                    # NEW PATTERNS - These catch the Flask vulnerabilities
+                    r'subprocess\.run\([^)]*command[^)]*\)',  # subprocess.run with command variable
+                    r'subprocess\.call\([^)]*command[^)]*\)',  # subprocess.call with command variable
+                    r'subprocess\.Popen\([^)]*command[^)]*\)', # subprocess.Popen with command variable
+                    r'f\.read\(\).*subprocess',               # Reading file then executing with subprocess
+                    r'file_content.*subprocess',              # File content used in subprocess
+                    r'command\s*=\s*f\.read\(\)',            # Command variable from file read
+                    r'with\s+open.*subprocess\.run',         # File read followed by subprocess execution
+                    r'for.*files.*subprocess\.run',          # Loop through files executing subprocess
                 ],
                 'severity': 'critical',
                 'cwe': 'CWE-78'
             },
 
-            # Path Traversal
+            # ENHANCED Path Traversal patterns
             'path_traversal': {
                 'patterns': [
                     r'\.\./\.\.',
@@ -79,9 +88,29 @@ class EnhancedCodeAnalyzer:
                     r'pathlib.*joinpath\([^)]*\.\.',
                     r'file_path\s*=.*\+.*\.\.',
                     r'\.\.[\\/].*[\\/]\.\.',
+                    # NEW PATTERNS - These catch ZIP extraction vulnerabilities
+                    r'zip_ref\.extractall\([^)]*\)',         # Unsafe ZIP extraction
+                    r'zipfile\..*extractall\([^)]*\)',       # Any zipfile extractall
+                    r'\.extractall\([^)]*[^)]*\)',           # Generic extractall without validation
+                    r'extract_dir.*extractall',              # Extract directory used unsafely
                 ],
                 'severity': 'high',
                 'cwe': 'CWE-22'
+            },
+
+            # NEW - File Processing Vulnerabilities
+            'unsafe_file_processing': {
+                'patterns': [
+                    r'for.*files.*open.*subprocess',         # Loop files, open, then subprocess
+                    r'os\.walk.*subprocess\.run',            # Walk directory then execute subprocess
+                    r'file_content.*exec\(',                 # Execute file contents
+                    r'with\s+open.*exec\(',                  # Read file then exec
+                    r'f\.read\(\).*exec\(',                  # File read then exec
+                    r'\.read\(\).*os\.system',               # File read then os.system
+                    r'for\s+.*\s+in\s+files.*command',      # Loop through files creating commands
+                ],
+                'severity': 'critical',
+                'cwe': 'CWE-78'
             },
 
             # Cross-Site Scripting (XSS)
@@ -367,6 +396,21 @@ class EnhancedCodeAnalyzer:
                                     confidence=0.9
                                 ))
 
+                            # subprocess.run/call/Popen calls
+                            elif (node.func.value.id == 'subprocess' and
+                                  node.func.attr in ['run', 'call', 'Popen']):
+                                # Check if command comes from variable (more dangerous)
+                                if node.args and isinstance(node.args[0], ast.Name):
+                                    self.vulns.append(Vulnerability(
+                                        type='command_injection',
+                                        severity='critical',
+                                        line=node.lineno,
+                                        description=f'subprocess.{node.func.attr}() with variable command detected',
+                                        recommendation='Never execute file contents as commands. Use allowlists and validation.',
+                                        cwe_id='CWE-78',
+                                        confidence=0.95
+                                    ))
+
                     elif isinstance(node.func, ast.Name):
                         # eval() calls
                         if node.func.id in ['eval', 'exec']:
@@ -522,12 +566,13 @@ class EnhancedCodeAnalyzer:
 
         recommendation_map = {
             'sql_injection': 'Use parameterized queries and prepared statements',
-            'command_injection': 'Validate input and use subprocess with shell=False',
+            'command_injection': 'NEVER execute file contents as commands. Use allowlists and validation.',
+            'unsafe_file_processing': 'Validate all file operations and never execute file contents',
             'xss': 'Encode output and implement Content Security Policy',
             'hardcoded_secrets': 'Use environment variables or secure key management',
             'insecure_deserialization': 'Use safe serialization formats like JSON',
             'weak_crypto': 'Use modern cryptographic algorithms (AES-256, SHA-256+)',
-            'path_traversal': 'Validate and sanitize file paths',
+            'path_traversal': 'Validate and sanitize file paths, use secure extraction methods',
             'ai_ml_security': 'Implement input validation and model security controls'
         }
 
@@ -546,8 +591,9 @@ class EnhancedCodeAnalyzer:
         """Get specific recommendation for vulnerability type"""
         recommendations = {
             'sql_injection': 'Use parameterized queries instead of string concatenation',
-            'command_injection': 'Use subprocess with list arguments and shell=False',
-            'path_traversal': 'Validate file paths and use os.path.abspath()',
+            'command_injection': 'NEVER execute file contents as commands. Use allowlists and proper validation.',
+            'unsafe_file_processing': 'Do not execute file contents. Validate all file operations.',
+            'path_traversal': 'Validate file paths and use secure extraction methods with path validation',
             'xss': 'Encode all user output and implement CSP headers',
             'hardcoded_secrets': 'Use environment variables or secure vaults',
             'insecure_random': 'Use secrets module for cryptographic randomness',
